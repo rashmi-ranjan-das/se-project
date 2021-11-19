@@ -12,15 +12,29 @@ import SearchIcon from '@mui/icons-material/Search';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { makeStyles } from '@mui/styles';
 import '../../assets/style.css'
+import moment from 'moment';
 
 export default function GuestBooking() {
     const [bookRoom, setBookRoom] = React.useState(false);
     const classes = useStyles();
+    const [state, setState] = React.useState({data: {arrival_date: moment().format('YYYY-MM-DD')}});
+
+    function handleInputChange(e) {
+        const { name, value } = e.target;
+        setState({
+            ...state,
+            data: {
+                ...state.data,
+                [name]: value
+            }
+        });
+    }
 
     function handleBookRoom(){
         setBookRoom(!bookRoom);
     }
 
+    console.log("lqlqlq", state.data)
   return (
     <>
     {
@@ -73,7 +87,7 @@ export default function GuestBooking() {
                                 </label>
                             </span>
                         </div>
-                        <input type="text" />
+                        <input type="text" name="full_name" onChange={handleInputChange} placeholder="Enter your full name" mandatory />
                     </Grid>
                     <Grid item lg={6}>
                         <div className="d-flex align-center space-between">
@@ -84,7 +98,7 @@ export default function GuestBooking() {
                                 </label>
                             </span>
                         </div>
-                        <input type="time" />
+                        <input type="time" name="arrival_time" onChange={handleInputChange} placeholder="Select Arrival time" mandatory />
                     </Grid>
                     <Grid item lg={6}>
                         <div className="d-flex align-center space-between">
@@ -95,7 +109,7 @@ export default function GuestBooking() {
                                 </label>
                             </span>
                         </div>
-                        <select name="room_Type" id="room_type" className="select">
+                        <select name="room_Type" id="room_type" className="select" name="room_type" onChange={handleInputChange} placeholder="Select Room Type" mandatory>
                             <option value="non_ac_single">NON AC Single</option>
                             <option value="non_ac_double">NON AC Double</option>
                             <option value="ac_single">AC Single</option>
@@ -111,7 +125,7 @@ export default function GuestBooking() {
                                 </label>
                             </span>
                         </div>
-                        <input type="text" />
+                        <input type="text" name="advance_paid" onChange={handleInputChange} placeholder="Advance Amount Paid (If any)" mandatory />
                     </Grid>
                     <Grid item lg={12}>
                         <div className="d-flex align-center space-between">
@@ -122,7 +136,18 @@ export default function GuestBooking() {
                                 </label>
                             </span>
                         </div>
-                        <input type="text" />
+                        <input type="text" name="stay_days" onChange={handleInputChange} placeholder="Number of Days of stay" mandatory />
+                    </Grid>
+                    <Grid item lg={12}>
+                        <div className="d-flex align-center space-between">
+                            <span>
+                                <label className={classes.InputLabel}>
+                                    Date of Arrival
+                                    <span style={{color : 'red'}}>*</span>
+                                </label>
+                            </span>
+                        </div>
+                        <input type="text" name="arrival_date" onChange={handleInputChange} value={state.data.arrival_date} mandatory disabled />
                     </Grid>
                     <Grid item lg={12}>
                         <div className="d-flex align-center space-between mt-10">

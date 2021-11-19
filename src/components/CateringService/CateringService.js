@@ -16,21 +16,39 @@ import Checkbox from '@mui/material/Checkbox';
 
 export default function CateringService() {
     const [orderFood, setOrderFood] = React.useState(false);
-    const [state, setState] = React.useState({data: {food_selected: []}});
+    const [state, setState] = React.useState({data: {}});
     const classes = useStyles();
+
+    React.useEffect(() => {
+        setState({data: {}});
+    }, [])
 
     function handleBookRoom(){
         setOrderFood(!orderFood);
     }
 
-    function handleFoodTypeChange(e){
-        setState(new_state => ({
-            ...new_state,
-            data: {
-                ...new_state.data,
-                food_selected: [...new_state.data.food_selected, e.target.value]
-            }
-        }))
+    function handleInputChange(e) {
+        const { name, value } = e.target;
+        console.log("lqlqlq", e.target.type)
+        const checked = e.target.checked;
+        if(e.target.name === "breakfast" || e.target.name === "lunch" || e.target.name === "dinner" || e.target.name === "snacks"){
+            setState({
+                ...state,
+                data: {
+                    ...state.data,
+                    [name]: checked,
+                    }
+                }
+            );
+        } else {
+            setState({
+                ...state,
+                data: {
+                    ...state.data,
+                    [name]: value
+                }
+            });
+        }
     }
 
   return (
@@ -85,7 +103,7 @@ export default function CateringService() {
                                 </label>
                             </span>
                         </div>
-                        <select name="guest" id="guest" className="select">
+                        <select name="guest" id="guest" className="select" onChange={handleInputChange} mandatory>
                             <option value="non_ac_single">asdasd</option>
                             <option value="non_ac_double">gdbdfve</option>
                             <option value="ac_single">wefwvwe</option>
@@ -103,9 +121,10 @@ export default function CateringService() {
                         </div>
                         <div className="d-flex align-center" style={{display: "inline-block", float: "left"}}>
                             <Checkbox
-                            checked={{}} 
-                            onChange={{}}
-                            name={"Breakfast"}
+                            checked={state.data.breakfast || false} 
+                            onChange={handleInputChange}
+                            name="breakfast"
+                            inputProps={{ 'aria-label': 'controlled' }}
                             />
                             <div className="d-flex space-between" style={{display: "inline-block"}}>
                                 <span>
@@ -117,9 +136,10 @@ export default function CateringService() {
                         </div>
                         <div className="d-flex align-center" style={{display: "inline-block", float: "left"}}>
                             <Checkbox
-                            checked={{}} 
-                            onChange={{}}
-                            name={"Breakfast"}
+                            checked={state.data.lunch || false}
+                            onChange={handleInputChange}
+                            name="lunch"
+                            inputProps={{ 'aria-label': 'controlled' }}
                             />
                             <div className="d-flex space-between" style={{display: "inline-block"}}>
                                 <span>
@@ -131,9 +151,10 @@ export default function CateringService() {
                         </div>
                         <div className="d-flex align-center" style={{display: "inline-block", float: "left"}}>
                             <Checkbox
-                            checked={{}} 
-                            onChange={{}}
-                            name={"Breakfast"}
+                            checked={state.data.dinner || false}
+                            onChange={handleInputChange}
+                            name="dinner"
+                            inputProps={{ 'aria-label': 'controlled' }}
                             />
                             <div className="d-flex space-between" style={{display: "inline-block"}}>
                                 <span>
@@ -145,9 +166,10 @@ export default function CateringService() {
                         </div>
                         <div className="d-flex align-center" style={{display: "inline-block", float: "left"}}>
                             <Checkbox
-                            checked={{}} 
-                            onChange={{}}
-                            name={"Breakfast"}
+                            checked={state.data.snacks || false}
+                            onChange={handleInputChange}
+                            name="snacks"
+                            inputProps={{ 'aria-label': 'controlled' }}
                             />
                             <div className="d-flex space-between" style={{display: "inline-block"}}>
                                 <span>
@@ -157,12 +179,6 @@ export default function CateringService() {
                                 </span>
                             </div>
                         </div>
-                        {/* <select name="food_Type" id="food_type" className="select" style={{height: "43px"}} onChange={handleFoodTypeChange} multiple>
-                            <option value="breakfast">Breakfast</option>
-                            <option value="lunch">Lunch</option>
-                            <option value="dinner">Dinner</option>
-                            <option value="snacks">Snacks</option>
-                        </select> */}
                     </Grid>
                     <Grid item lg={12}>
                         <div className="d-flex align-center space-between">
@@ -173,7 +189,7 @@ export default function CateringService() {
                                 </label>
                             </span>
                         </div>
-                        <input type="number" value="0" disabled={state.data.food_selected && state.data.food_selected.includes('breakfast') ? false : true} />
+                        <input type="number" min="0" name="breakfast_quantity" onChange={handleInputChange} mandatory disabled={!state.data.breakfast ? true : false} />
                     </Grid>
                     <Grid item lg={12}>
                         <div className="d-flex align-center space-between">
@@ -184,7 +200,7 @@ export default function CateringService() {
                                 </label>
                             </span>
                         </div>
-                        <input type="number" value="0" disabled={state.data.food_selected && state.data.food_selected.includes('lunch') ? false : true} />
+                        <input type="number" min="0" name="lunch_quantity" onChange={handleInputChange} mandatory disabled={!state.data.lunch ? true : false} />
                     </Grid>
                     <Grid item lg={12}>
                         <div className="d-flex align-center space-between">
@@ -195,7 +211,7 @@ export default function CateringService() {
                                 </label>
                             </span>
                         </div>
-                        <input type="number" value="0" disabled={state.data.food_selected && state.data.food_selected.includes('dinner') ? false : true} />
+                        <input type="number" min="0" name="dinner_quantity" onChange={handleInputChange} mandatory disabled={!state.data.dinner ? true : false} />
                     </Grid>
                     <Grid item lg={12}>
                         <div className="d-flex align-center space-between">
@@ -206,7 +222,7 @@ export default function CateringService() {
                                 </label>
                             </span>
                         </div>
-                        <input type="number" value="0" disabled={state.data.food_selected && state.data.food_selected.includes('snacks') ? false : true} />
+                        <input type="number" min="0" name="snacks_quantity" onChange={handleInputChange} mandatory disabled={!state.data.snacks ? true : false} />
                     </Grid>
                     <Grid item lg={12}>
                         <div className="d-flex align-center space-between mt-10">

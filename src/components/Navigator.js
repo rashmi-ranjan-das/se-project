@@ -30,7 +30,6 @@ const categories = [
       {
         id: 'Guest Bookings',
         icon: <PeopleIcon />,
-        active: true,
         path: '/',
       },
       { id: 'Catering Service', 
