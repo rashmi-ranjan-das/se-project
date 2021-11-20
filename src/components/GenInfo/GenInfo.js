@@ -6,8 +6,8 @@ import Paper from '@mui/material/Paper';
 export default function GenInfo() {
     return (
         <Paper sx={{ maxWidth: 936, margin: 'auto', overflow: 'hidden' }}>
-            <Typography sx={{ my: 5, mx: 2 }} color="text.secondary" align="center">
-                <h1 style={{marginBottom:"6%"}}>Predefined Hostel facilities</h1>
+            <Typography sx={{ my: 5, mx: 2 }} color="text.secondary">
+                <h2 style={{marginBottom:"20px"}}>Predefined Hotel facilities</h2>
                 <ul>
                     <li style={{marginBottom:"2%"}}>Number of Rooms = 20</li>
                     <li style={{marginBottom:"2%"}}>Price increases when occupancy {'>'} 60%</li>

@@ -5,6 +5,7 @@ import GuestBooking from "./components/GuestBooking/GuestBooking";
 import GuestMain from './GuestMain';
 import CateringMain from './CateringMain';
 import GenInfo from './GenInfoMain';
+import RoomPriceMain from './RoomPriceMain'
 
 function initializeRoutes(){
     ReactDOM.render((
@@ -12,8 +13,8 @@ function initializeRoutes(){
             <Routes>
                 <Route exact path="/" element={<GuestMain />} />
                 <Route exact path="/catering" element={<CateringMain />} />
-                <Route exact path="/textile/:textile_name" element={<CateringMain />} />
-                <Route exact path="/Geninfo" element={<GenInfo />} />
+                <Route exact path="/geninfo" element={<GenInfo />} />
+                <Route exact path="/room/priceupdate" element={<RoomPriceMain />} />
             </Routes>
         </BrowserRouter>
     ),document.getElementById('root'))

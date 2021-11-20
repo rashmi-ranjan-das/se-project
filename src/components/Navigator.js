@@ -36,13 +36,19 @@ const categories = [
         icon: <FastfoodIcon />,
         path: '/catering',
       },
-      { id: 'Room Price Update', icon: <PriceChangeIcon />, path: '/roomprice' },
+      { id: 'Room Price Update',
+        icon: <PriceChangeIcon />, 
+        path: '/room/priceupdate' 
+      },
       {
         id: 'Generate Bills',
         icon: <ReceiptIcon />,
         path: '/bills',
       },
-      { id: 'General Information', icon: <InfoIcon />, path: '/Geninfo' },
+      { id: 'General Information',
+        icon: <InfoIcon />, 
+        path: '/geninfo' 
+      },
     ],
   },
 ];
