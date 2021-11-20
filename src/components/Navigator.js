@@ -42,7 +42,7 @@ const categories = [
         icon: <ReceiptIcon />,
         path: '/bills',
       },
-      { id: 'General Information', icon: <InfoIcon />, path: '/info' },
+      { id: 'General Information', icon: <InfoIcon />, path: '/Geninfo' },
     ],
   },
 ];

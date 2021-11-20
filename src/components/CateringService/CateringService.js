@@ -94,7 +94,7 @@ export default function CateringService() {
             </AppBar> */}
             <Typography sx={{ my: 5, mx: 2 }} color="text.secondary" align="center">
                 <Grid container spacing="3">
-                    <Grid item lg={12}>
+                    <Grid item lg={6}>
                         <div className="d-flex align-center space-between">
                             <span>
                                 <label className={classes.InputLabel}>
@@ -110,7 +110,7 @@ export default function CateringService() {
                             <option value="ac_double">hntn</option>
                         </select>
                     </Grid>
-                    <Grid item lg={12}>
+                    <Grid item lg={6}>
                         <div className="d-flex align-center space-between">
                             <span>
                                 <label className={classes.InputLabel}>
@@ -119,7 +119,7 @@ export default function CateringService() {
                                 </label>
                             </span>
                         </div>
-                        <div className="d-flex align-center" style={{display: "inline-block", float: "left"}}>
+                        <div className="d-flex align-center mr-5" style={{display: "inline-block", float: "left"}}>
                             <Checkbox
                             checked={state.data.breakfast || false} 
                             onChange={handleInputChange}
@@ -134,7 +134,7 @@ export default function CateringService() {
                                 </span>
                             </div>
                         </div>
-                        <div className="d-flex align-center" style={{display: "inline-block", float: "left"}}>
+                        <div className="d-flex align-center mr-5" style={{display: "inline-block", float: "left"}}>
                             <Checkbox
                             checked={state.data.lunch || false}
                             onChange={handleInputChange}
@@ -149,7 +149,7 @@ export default function CateringService() {
                                 </span>
                             </div>
                         </div>
-                        <div className="d-flex align-center" style={{display: "inline-block", float: "left"}}>
+                        <div className="d-flex align-center mr-5" style={{display: "inline-block", float: "left"}}>
                             <Checkbox
                             checked={state.data.dinner || false}
                             onChange={handleInputChange}
@@ -164,7 +164,7 @@ export default function CateringService() {
                                 </span>
                             </div>
                         </div>
-                        <div className="d-flex align-center" style={{display: "inline-block", float: "left"}}>
+                        <div className="d-flex align-center mr-5" style={{display: "inline-block", float: "left"}}>
                             <Checkbox
                             checked={state.data.snacks || false}
                             onChange={handleInputChange}
