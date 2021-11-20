@@ -6,7 +6,7 @@ import GuestMain from './GuestMain';
 import CateringMain from './CateringMain';
 import GenInfo from './GenInfoMain';
 import RoomPriceMain from './RoomPriceMain'
-
+import GenerateBillsMain from './GenerateBillsMain';
 function initializeRoutes(){
     ReactDOM.render((
         <BrowserRouter>
@@ -15,6 +15,7 @@ function initializeRoutes(){
                 <Route exact path="/catering" element={<CateringMain />} />
                 <Route exact path="/geninfo" element={<GenInfo />} />
                 <Route exact path="/room/priceupdate" element={<RoomPriceMain />} />
+                <Route exact path="/generatebills" element={<GenerateBillsMain />} />
             </Routes>
         </BrowserRouter>
     ),document.getElementById('root'))

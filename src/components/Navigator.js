@@ -43,7 +43,7 @@ const categories = [
       {
         id: 'Generate Bills',
         icon: <ReceiptIcon />,
-        path: '/bills',
+        path: '/generatebills',
       },
       { id: 'General Information',
         icon: <InfoIcon />, 
