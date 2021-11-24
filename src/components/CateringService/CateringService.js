@@ -13,6 +13,8 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import { makeStyles } from '@mui/styles';
 import '../../assets/style.css'
 import Checkbox from '@mui/material/Checkbox';
+import { TableCell, TableBody, TableRow } from '@mui/material';
+import { Table, TableContainer, TableHead } from '@mui/material';
 
 export default function CateringService() {
     const [orderFood, setOrderFood] = React.useState(false);
@@ -20,10 +22,39 @@ export default function CateringService() {
     const classes = useStyles();
 
     React.useEffect(() => {
-        setState({data: {}});
+        fetch('http://127.0.0.1:8000/api/cateringorders/', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }).then(res => res.json())
+        .then(data => {
+            setState(new_state => ({
+                ...new_state,
+                data:{
+                    ...new_state.data,
+                    order_list: data
+                }
+            }))
+        })
     }, [])
 
     function handleBookRoom(){
+        fetch("http://127.0.0.1:8000/api/guests/", {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }).then(res => res.json())
+        .then(data => {
+            setState(new_state => ({
+                ...new_state,
+                data:{
+                    ...new_state.data,
+                    guest_list: data
+                }
+            }))
+        })
         setOrderFood(!orderFood);
     }
 
@@ -51,6 +82,26 @@ export default function CateringService() {
         }
     }
 
+    function handleSubmit(){
+        fetch("http://127.0.0.1:8000/api/cateringorders/", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                breakfast_quantity: state.data.breakfast ? state.data.breakfast_quantity : 0,
+                dinner_quantity: state.data.dinner ? state.data.dinner_quantity : 0,
+                lunch_quantity: state.data.lunch ? state.data.lunch_quantity : 0,
+                snacks_quantity: state.data.snacks ? state.data.snacks_quantity : 0,
+                guest: state.data.guest
+            })
+        }).then(res => {
+            console.log("Success")
+            window.location.reload();
+        })
+        .catch(err => console.log(err))
+    }
+
   return (
     <>
     {
@@ -70,10 +121,14 @@ export default function CateringService() {
                             </span>
                         </div>
                         <select name="guest" id="guest" className="select" onChange={handleInputChange} mandatory>
-                            <option value="non_ac_single">asdasd</option>
-                            <option value="non_ac_double">gdbdfve</option>
-                            <option value="ac_single">wefwvwe</option>
-                            <option value="ac_double">hntn</option>
+                            <option key={0} value="null">Please Select</option>
+                            {
+                                state.data.guest_list && state.data.guest_list.map((guest, index) => {
+                                    return (
+                                        <option key={index} value={guest.id}>{guest.name}</option>
+                                    )
+                                })
+                            }
                         </select>
                     </Grid>
                     <Grid item lg={6}>
@@ -193,7 +248,7 @@ export default function CateringService() {
                     <Grid item lg={12}>
                         <div className="d-flex align-center space-between mt-10">
                             <button className="btn btn-outline-grey" onClick={handleBookRoom}>Cancel</button>
-                            <button className="btn btn-submit">Submit</button>
+                            <button className="btn btn-submit" onClick={handleSubmit}>Submit</button>
                         </div> 
                     </Grid>
                 </Grid>
@@ -239,7 +294,44 @@ export default function CateringService() {
                 </Toolbar>
             </AppBar>
             <Typography sx={{ my: 5, mx: 2 }} color="text.secondary" align="center">
-                No Orders Yet
+                {
+                    state.data.order_list && state.data.order_list.length > 0 ? 
+                    <TableContainer component={Paper}>
+                        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                            <TableHead>
+                            <TableRow>
+                                <TableCell style={{fontWeight: 'bold',fontSize:'18px'}}>Guest</TableCell>
+                                <TableCell align="right" style={{fontWeight: 'bold',fontSize:'18px'}}>Breakfast</TableCell>
+                                <TableCell align="right" style={{fontWeight: 'bold',fontSize:'18px'}}>Lunch</TableCell>
+                                <TableCell align="right" style={{fontWeight: 'bold',fontSize:'18px'}}>Dinner</TableCell>
+                                <TableCell align="right" style={{fontWeight: 'bold',fontSize:'18px'}}>Snacks</TableCell>
+                            </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {
+                                    state.data.order_list && state.data.order_list.map((order) => {
+                                        return(
+                                            <TableRow
+                                                key={order.guest}
+                                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                                >
+                                                <TableCell component="th" scope="row">
+                                                    {order.guest}
+                                                </TableCell>
+                                                <TableCell align="right">{order.breakfast_quantity}</TableCell>
+                                                <TableCell align="right">{order.lunch_quantity}</TableCell>
+                                                <TableCell align="right">{order.dinner_quantity}</TableCell>
+                                                <TableCell align="right">{order.snacks_quantity}</TableCell>
+                                                </TableRow>
+                                        )
+                                    })
+                                }
+                            </TableBody>
+                        </Table>
+                        </TableContainer>
+                    :
+                    <span>No Orders Yet</span>
+                }
             </Typography>
             </Paper>
         </>

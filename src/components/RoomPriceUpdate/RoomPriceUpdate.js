@@ -1,27 +1,41 @@
 import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Tooltip from '@mui/material/Tooltip';
-import IconButton from '@mui/material/IconButton';
-import SearchIcon from '@mui/icons-material/Search';
-import RefreshIcon from '@mui/icons-material/Refresh';
 import { makeStyles } from '@mui/styles';
 import '../../assets/style.css'
 import Checkbox from '@mui/material/Checkbox';
 
 export default function RoomPriceUpdate(){
     const [priceUpdateForm, openPriceUpdateForm] = React.useState(false);
-    const [state, setState] = React.useState({data: {}});
+    const [state, setState] = React.useState({data: {room_type: 1}});
     const classes = useStyles();
+
+    React.useEffect(() => {
+        fetch('http://localhost:8000/api/roomcharges', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            setState(new_state => ({
+                ...new_state,
+                data:{
+                    ...new_state.data,
+                    roomCharges: data
+                }
+            }));
+        })
+        .catch(err => console.log(err));
+    }, [])
 
     function handlePriceUpdate(){
         openPriceUpdateForm(!priceUpdateForm);
     }
+
+    console.log("lqlqlq", state.data)
 
     function handleInputChange(e) {
         const { name, value } = e.target;
@@ -47,6 +61,21 @@ export default function RoomPriceUpdate(){
         }
     }
 
+    function handleSubmit(){
+        fetch(`http://localhost:8000/api/roomcharges/${state.data.room_type}/`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({room_charges: state.data.room_charges})
+        }).then(res => res.json())
+        .then(data => {
+            console.log(data)
+            window.location.reload();
+        })
+    }
+        
+
     return(
         <>
     {
@@ -56,24 +85,23 @@ export default function RoomPriceUpdate(){
             <Typography sx={{ my: 5, mx: 2 }} color="text.secondary" align="center">
                 <h2 style={{marginBottom:"20px"}}>Update Room Price</h2>
                 <Grid container spacing="3">
-                    <Grid item lg={4}>
-                        <div className="d-flex align-center mr-5" style={{display: "inline-block", float: "left"}}>
-                            <Checkbox
-                            checked={state.data.non_ac_single || false} 
-                            onChange={handleInputChange}
-                            name="non_ac_single"
-                            inputProps={{ 'aria-label': 'controlled' }}
-                            />
-                            <div className="d-flex space-between" style={{display: "inline-block"}}>
-                                <span>
-                                    <label className={classes.InputLabel}>
-                                    Non AC Single 
-                                    </label>
-                                </span>
-                            </div>
+                    <Grid item lg={12}>
+                        <div className="d-flex align-center space-between">
+                            <span>
+                                <label className={classes.InputLabel}>
+                                    Select Room Type
+                                    <span style={{color : 'red'}}>*</span>
+                                </label>
+                            </span>
                         </div>
+                        <select name="room_type" id="room_type" className="select" name="room_type" onChange={handleInputChange} placeholder="Select Room Type" mandatory>
+                            <option value="1">NON AC Single</option>
+                            <option value="2">NON AC Double</option>
+                            <option value="3">AC Single</option>
+                            <option value="4">AC Double</option>
+                        </select>
                     </Grid>
-                    <Grid item lg={8}>
+                    <Grid item lg={12}>
                     <div className="d-flex align-center space-between">
                             <span>
                                 <label className={classes.InputLabel}>
@@ -82,97 +110,12 @@ export default function RoomPriceUpdate(){
                                 </label>
                             </span>
                         </div>
-                        <input type="number" min="0" name="nonac_single_price" onChange={handleInputChange} mandatory disabled={!state.data.non_ac_single ? true : false} />
-                    </Grid>
-                    <Grid item lg={4}>
-                        <div className="d-flex align-center mr-5" style={{display: "inline-block", float: "left"}}>
-                            <Checkbox
-                            checked={state.data.non_ac_double || false} 
-                            onChange={handleInputChange}
-                            name="non_ac_double"
-                            inputProps={{ 'aria-label': 'controlled' }}
-                            />
-                            <div className="d-flex space-between" style={{display: "inline-block"}}>
-                                <span>
-                                    <label className={classes.InputLabel}>
-                                    Non AC Double
-                                    </label>
-                                </span>
-                            </div>
-                        </div>
-                    </Grid>
-                    <Grid item lg={8}>
-                    <div className="d-flex align-center space-between">
-                            <span>
-                                <label className={classes.InputLabel}>
-                                    Set New Price
-                                    <span style={{color : 'red'}}>*</span>
-                                </label>
-                            </span>
-                        </div>
-                        <input type="number" min="0" name="nonac_double_price" onChange={handleInputChange} mandatory disabled={!state.data.non_ac_double ? true : false} />
-                    </Grid>
-                    <Grid item lg={4}>
-                        <div className="d-flex align-center mr-5" style={{display: "inline-block", float: "left"}}>
-                            <Checkbox
-                            checked={state.data.ac_single || false} 
-                            onChange={handleInputChange}
-                            name="ac_single"
-                            inputProps={{ 'aria-label': 'controlled' }}
-                            />
-                            <div className="d-flex space-between" style={{display: "inline-block"}}>
-                                <span>
-                                    <label className={classes.InputLabel}>
-                                    AC Single
-                                    </label>
-                                </span>
-                            </div>
-                        </div>
-                    </Grid>
-                    <Grid item lg={8}>
-                    <div className="d-flex align-center space-between">
-                            <span>
-                                <label className={classes.InputLabel}>
-                                    Set New Price
-                                    <span style={{color : 'red'}}>*</span>
-                                </label>
-                            </span>
-                        </div>
-                        <input type="number" min="0" name="ac_single_price" onChange={handleInputChange} mandatory disabled={!state.data.ac_single ? true : false} />
-                    </Grid>
-                    <Grid item lg={4}>
-                        <div className="d-flex align-center mr-5" style={{display: "inline-block", float: "left"}}>
-                            <Checkbox
-                            checked={state.data.ac_double || false} 
-                            onChange={handleInputChange}
-                            name="ac_double"
-                            inputProps={{ 'aria-label': 'controlled' }}
-                            />
-                            <div className="d-flex space-between" style={{display: "inline-block"}}>
-                                <span>
-                                    <label className={classes.InputLabel}>
-                                    AC Double
-                                    </label>
-                                </span>
-                            </div>
-                        </div>
-                    </Grid>
-                    <Grid item lg={8}>
-                    <div className="d-flex align-center space-between">
-                            <span>
-                                <label className={classes.InputLabel}>
-                                    Set New Price
-                                    <span style={{color : 'red'}}>*</span>
-                                </label>
-                            </span>
-                        </div>
-                        <input type="number" min="0" name="ac_double_price" onChange={handleInputChange} mandatory disabled={!state.data.ac_double ? true : false} />
-                    </Grid>
-                    
+                        <input type="number" min="0" name="room_charges" onChange={handleInputChange} mandatory />
+                    </Grid>            
                     <Grid item lg={12}>
                         <div className="d-flex align-center space-between mt-10">
                             <button className="btn btn-outline-grey" onClick={handlePriceUpdate}>Cancel</button>
-                            <button className="btn btn-submit">Submit</button>
+                            <button className="btn btn-submit" onClick={handleSubmit}>Submit</button>
                         </div> 
                     </Grid>
                 </Grid>
@@ -193,7 +136,15 @@ export default function RoomPriceUpdate(){
                         </div>
                         <div>
                         <div className="main-div">
-                            <p className="main-heading">Rs 600</p>
+                            <p className="main-heading">
+                                {
+                                        state.data.roomCharges && state.data.roomCharges.map((room) => {
+                                            if(room.room_type === "non_ac_single"){
+                                                return (<span>Rs. {room.room_charges}</span>)
+                                            }
+                                        })
+                                    }
+                            </p>
                             </div>
                         </div>
                     </Grid>
@@ -205,7 +156,14 @@ export default function RoomPriceUpdate(){
                         </div>
                         <div>
                         <div className="main-div">
-                            <p className="main-heading">Rs 800</p>
+                            <p className="main-heading">                                
+                            {
+                                        state.data.roomCharges && state.data.roomCharges.map((room) => {
+                                            if(room.room_type === "non_ac_double"){
+                                                return (<span>Rs. {room.room_charges}</span>)
+                                            }
+                                        })
+                                    }</p>
                             </div>
                         </div>
                     </Grid>
@@ -217,7 +175,13 @@ export default function RoomPriceUpdate(){
                         </div>
                         <div>
                         <div className="main-div">
-                            <p className="main-heading">Rs 1200</p>
+                            <p className="main-heading">{
+                                        state.data.roomCharges && state.data.roomCharges.map((room) => {
+                                            if(room.room_type === "ac_single"){
+                                                return (<span>Rs. {room.room_charges}</span>)
+                                            }
+                                        })
+                                    }</p>
                             </div>
                         </div>
                     </Grid>
@@ -229,7 +193,13 @@ export default function RoomPriceUpdate(){
                         </div>
                         <div>
                         <div className="main-div">
-                            <p className="main-heading">Rs 1800</p>
+                            <p className="main-heading">{
+                                        state.data.roomCharges && state.data.roomCharges.map((room) => {
+                                            if(room.room_type === "ac_double"){
+                                                return (<span>Rs. {room.room_charges}</span>)
+                                            }
+                                        })
+                                    }</p>
                             </div>
                         </div>
                     </Grid>

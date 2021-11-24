@@ -26,3 +26,4 @@ class frequentUsersadmin(admin.ModelAdmin):
     list_display=['guest','frequency','UIN']
 
 
+

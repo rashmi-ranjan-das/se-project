@@ -70,6 +70,19 @@ const itemCategory = {
 
 export default function Navigator(props) {
   const { ...other } = props;
+  const [state, setState] = React.useState({})
+
+  React.useEffect(() => {
+    fetch('http://127.0.0.1:8000/api/hotel/', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    }).then(res => res.json())
+    .then(data => {
+      setState({room_detail: data})
+    })
+  }, [])
 
   return (
     <Drawer variant="permanent" {...other}>
@@ -98,10 +111,23 @@ export default function Navigator(props) {
                 </ListItem>
               </Link>
             ))}
-
             <Divider sx={{ mt: 2 }} />
           </Box>
         ))}
+         <Box key={"id"} sx={{ bgcolor: '#101F33' }}>
+          <ListItem sx={{ py: 2, px: 3 }}>
+              <ListItemText sx={{ color: '#fff' }}>Occupancy Rate</ListItemText>
+            </ListItem>
+            {state.room_detail && state.room_detail.map((room) => (
+                <ListItem disablePadding key={room.room_type}>
+                  <ListItemButton sx={item}>
+                    <ListItemText>{room.room_type}</ListItemText>
+                    <ListItemText>{((5-(room.room_availability))/5) * 100} %</ListItemText>
+                  </ListItemButton>
+                </ListItem>
+              )
+            )}
+         </Box>
       </List>
     </Drawer>
   );

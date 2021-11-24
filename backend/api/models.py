@@ -1,4 +1,5 @@
 from django.db import models
+import datetime
 
 room_choices=(('non_ac_single','non_ac_single'),
                 ('non_ac_double','non_ac_double'),
@@ -10,18 +11,22 @@ class Guest(models.Model):
     duration=models.IntegerField()
     advanced_paid=models.IntegerField()
     room_choices=models.CharField(max_length=50,choices=room_choices,default='Pending')
-    arrival=models.DateTimeField(auto_now_add=True)
+    arrival=models.DateTimeField(default=datetime.datetime.now())
+
+    def __str__(self):
+        return self.name
 
 
 class room_booked(models.Model):
     guest=models.OneToOneField(Guest,on_delete=models.CASCADE)
+    guest_name=models.CharField(max_length=50)
     room_number=models.IntegerField()
-    unique_token_number=models.IntegerField(unique=True)
+    unique_token_number=models.CharField(unique=True, max_length=100)
 
 
 
 class catering_orders(models.Model):
-    guest=models.OneToOneField(Guest,on_delete=models.CASCADE)
+    guest=models.ForeignKey(Guest,on_delete=models.CASCADE)
     breakfast_quantity=models.IntegerField(default=0)
     lunch_quantity=models.IntegerField(default=0)
     snacks_quantity=models.IntegerField(default=0)
@@ -33,9 +38,9 @@ class room_charges(models.Model):
 
 class hotel(models.Model):
     room_type=models.CharField(max_length=50,choices=room_choices)
-    room_availability=models.IntegerField()
+    room_availability=models.IntegerField(default=5)
 
 class frequent_users(models.Model):
    guest=models.CharField(max_length=50)
    frequency=models.IntegerField()
-   UIN=models.IntegerField(unique=True)
+   UIN=models.CharField(max_length=100)
